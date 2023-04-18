@@ -1,5 +1,6 @@
 import './style.css'
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
@@ -19,20 +20,35 @@ camera.position.setZ(30);
 
 renderer.render(scene, camera);
 
-const loader = new THREE.TextureLoader();
-loader.load('models/JAZZKID.glb', function(gltf) {
-    gltf.scene.traverse(function(node) {
-        if (node.isMesh) {
-            node.material = new THREE.MeshStandardMaterial({
-                color: 0xffffff
-            })
-        }
-    })
-    scene.add(gltf.scene);
-})
+const loader = new GLTFLoader();
+loader.load('./models/JAZZKID.glb', function (gltf) {
+    const text = gltf.scene
+    text.scale.set(5, 5, 5)
+    text.position.set(0, 0, 0)
+    scene.add(text)
+    text.rotation.x = 1.1
+
+
+    // Rotation animation
+
+    let rotationSpeed = 0.002;
+    let rotationDirection = new THREE.Vector3(1, 1, 1).normalize();
+
+    const rotateText = () => {
+        requestAnimationFrame(rotateText);
+        text.rotation.x += rotationSpeed * rotationDirection.x;
+        text.rotation.y += rotationSpeed * rotationDirection.y;
+        text.rotation.z += rotationSpeed * rotationDirection.z;
+        renderer.render(scene, camera);
+    }
+    rotateText();
+});
+
 
 const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(20, 20, 20);
+scene.add(pointLight)
+
 // const light = new THREE.DirectionalLight(0xffffff, 1);
 // light.position.set(0, 0, 1);
 // scene.add(light);
@@ -61,11 +77,6 @@ Array(200).fill().forEach(addStar);
 
 function animate() {
     requestAnimationFrame(animate);
-
-    // torus.rotation.x += 0.01;
-    // torus.rotation.y += 0.005;
-    // torus.rotation.z += 0.01;
-
 
     controls.update();
 
