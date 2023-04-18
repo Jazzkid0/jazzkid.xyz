@@ -19,7 +19,7 @@ camera.position.setZ(30);
 renderer.render(scene, camera);
 
 const loader = new GLTFLoader();
-loader.load('./models/JAZZKID.glb', function (gltf) {
+loader.load('./JAZZKID.glb', function (gltf) {
     const text = gltf.scene
     text.scale.set(5, 5, 5)
     text.position.set(0, 0, 0)
