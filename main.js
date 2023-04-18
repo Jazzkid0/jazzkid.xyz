@@ -19,17 +19,26 @@ camera.position.setZ(30);
 
 renderer.render(scene, camera);
 
-const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-const material = new THREE.MeshStandardMaterial({ color: 0xFF6347 });
-const torus = new THREE.Mesh(geometry, material);
-
-scene.add(torus);
+const loader = new THREE.TextureLoader();
+loader.load('models/JAZZKID.glb', function(gltf) {
+    gltf.scene.traverse(function(node) {
+        if (node.isMesh) {
+            node.material = new THREE.MeshStandardMaterial({
+                color: 0xffffff
+            })
+        }
+    })
+    scene.add(gltf.scene);
+})
 
 const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(20, 20, 20);
+// const light = new THREE.DirectionalLight(0xffffff, 1);
+// light.position.set(0, 0, 1);
+// scene.add(light);
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
-scene.add(pointLight, ambientLight);
+scene.add(ambientLight);
 
 const lightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(200, 50);
@@ -53,9 +62,10 @@ Array(200).fill().forEach(addStar);
 function animate() {
     requestAnimationFrame(animate);
 
-    torus.rotation.x += 0.01;
-    torus.rotation.y += 0.005;
-    torus.rotation.z += 0.01;
+    // torus.rotation.x += 0.01;
+    // torus.rotation.y += 0.005;
+    // torus.rotation.z += 0.01;
+
 
     controls.update();
 
