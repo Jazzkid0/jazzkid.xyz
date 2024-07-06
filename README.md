@@ -1,2 +1,2 @@
 # jazzkid.xyz
-Personal site, for fun
+3D animated word art in space woah
